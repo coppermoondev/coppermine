@@ -316,6 +316,7 @@ app:use(honeymoon.helmet())
 app:use(honeymoon.cors())
 
 -- Lantern debug toolbar (only in development)
+--[[
 lantern.setup(app, {
     enabled = app:get_setting("env") ~= "production",
     ignorePaths = { "/api/", "/public/" },  -- Don't inject into API or static routes
@@ -324,6 +325,8 @@ lantern.setup(app, {
 
 -- Bridge Ember logs to Lantern debug panel
 app:use(ember.lantern())
+
+]]--
 
 -- Static files
 app:use("/public", honeymoon.static("./public"))

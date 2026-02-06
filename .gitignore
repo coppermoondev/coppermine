@@ -20,5 +20,5 @@ build/
 # OS
 .DS_Store
 Thumbs.db
-harbor-modules/
+harbor_modules/
 harbor.lock

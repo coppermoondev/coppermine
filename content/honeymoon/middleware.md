@@ -246,6 +246,85 @@ app:get("/dashboard", function(req, res)
 end)
 ```
 
+### Response Cache
+
+#### honeymoon.cache(options?)
+
+Cache responses in memory to avoid re-rendering templates on every request. Cached responses are served directly with an `X-Cache: HIT` header, skipping route handlers entirely.
+
+```lua
+-- Cache all GET responses for 1 hour
+app:use(honeymoon.cache({ ttl = 3600 }))
+
+-- Cache only documentation pages
+app:use("/docs", honeymoon.cache({ ttl = 3600 }))
+
+-- Per-route cache with custom TTL
+app:get("/about", honeymoon.cache({ ttl = 86400 }), function(req, res)
+    res:render("about")
+end)
+```
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `ttl` | `3600` | Time-to-live in seconds |
+| `methods` | `{"GET", "HEAD"}` | HTTP methods to cache |
+| `statusCodes` | `{200}` | Only cache these status codes |
+| `headers` | `true` | Also cache response headers |
+| `maxEntries` | `1000` | Max cached entries (evicts oldest) |
+| `keyGenerator` | `method:path?query` | Function(req) to generate cache key |
+| `skip` | `nil` | Function(req) returning true to bypass cache |
+
+Response headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-Cache` | `HIT` if served from cache, `MISS` if freshly rendered |
+| `Age` | Seconds since the response was cached (on HIT) |
+
+#### honeymoon.cachePage(ttl?)
+
+Shorthand for page caching — caches GET 200 responses by path only (ignores query string):
+
+```lua
+-- Cache pages for 1 hour (default)
+app:use("/docs", honeymoon.cachePage())
+
+-- Cache pages for 24 hours
+app:use("/docs", honeymoon.cachePage(86400))
+```
+
+#### honeymoon.cacheApi(ttl?)
+
+Shorthand for API caching — caches GET 200 responses including query string in the cache key:
+
+```lua
+-- Cache API responses for 60 seconds (default)
+app:use("/api", honeymoon.cacheApi())
+
+-- Cache for 5 minutes
+app:use("/api", honeymoon.cacheApi(300))
+```
+
+#### Manual Cache Invalidation
+
+The cache middleware attaches `req.cache` to every request, allowing manual cache control from route handlers:
+
+```lua
+-- Invalidate cache when content changes
+app:post("/admin/publish", function(req, res)
+    -- ... publish content ...
+    req.cache.clear()  -- Flush entire cache
+    res:json({ ok = true })
+end)
+
+-- Delete a specific cached entry
+app:post("/admin/update-page", function(req, res)
+    req.cache.delete("GET:/docs/about")
+    res:json({ ok = true })
+end)
+```
+
 ## Creating Custom Middleware
 
 ### Simple Middleware
@@ -365,6 +444,9 @@ app:get("/", handler)
 | `honeymoon.bearerAuth()` | Bearer token auth |
 | `honeymoon.apiKeyAuth()` | API key auth |
 | `honeymoon.jwtAuth()` | JWT auth |
+| `honeymoon.cache()` | Response caching |
+| `honeymoon.cachePage()` | Page response caching |
+| `honeymoon.cacheApi()` | API response caching |
 | `honeymoon.compression()` | Response compression |
 | `honeymoon.timeout()` | Request timeout |
 

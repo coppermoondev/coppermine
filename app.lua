@@ -19,7 +19,7 @@ app:set("views", "./views")
 -- Setup Vein templating engine with metrics enabled for Lantern
 app.views:use("vein")
 app.views:set("views", "./views")
-app.views:set("cache", false)
+app.views:set("cache", true)
 app.views:set("debug", true)
 app.views:set("metrics", true)  -- Enable metrics for Lantern debug panel
 
@@ -330,6 +330,9 @@ app:use(ember.lantern())
 
 -- Static files
 app:use("/public", honeymoon.static("./public"))
+
+-- Cache documentation pages (avoids re-rendering templates on every request)
+app:use("/docs", honeymoon.cachePage(3600))
 
 --------------------------------------------------------------------------------
 -- Documentation Structure

@@ -1,0 +1,119 @@
+{% extends "layouts/base" %}
+
+{% block content %}
+<div class="text-center py-16">
+    <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6">
+        <span class="bg-gradient-to-r from-white via-copper-300 to-copper-500 bg-clip-text text-transparent">
+            CopperMoon
+        </span>
+    </h1>
+    <p class="text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+        A blazing-fast Lua runtime built in Rust. Build modern web applications, APIs, and more with the simplicity of Lua and the performance of Rust.
+    </p>
+
+    <div class="flex gap-4 justify-center mb-16">
+        <a href="/docs/getting-started/introduction" 
+           class="px-6 py-3 bg-gradient-to-r from-copper-500 to-orange-500 text-black font-medium rounded-lg hover:opacity-90 transition-opacity">
+            Get Started
+        </a>
+        <a href="{{ site.github }}" 
+           target="_blank"
+           class="px-6 py-3 border border-zinc-700 text-white font-medium rounded-lg hover:bg-zinc-800 hover:border-zinc-600 transition-all">
+            GitHub
+        </a>
+    </div>
+
+    <div class="max-w-lg mx-auto">
+        <pre class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 text-left overflow-x-auto"><code class="text-sm font-mono text-zinc-300"><span class="text-zinc-500">-- Quick install</span>
+curl -fsSL https://coppermoon.dev/install.sh | sh
+
+<span class="text-zinc-500">-- Create a new project</span>
+shipyard new my-app --template web
+
+<span class="text-zinc-500">-- Start development</span>
+cd my-app && shipyard dev</code></pre>
+    </div>
+</div>
+
+<h2 class="text-2xl font-semibold text-center mt-20 mb-10 tracking-tight">The CopperMoon Ecosystem</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+    <a href="/docs/coppermoon/overview" class="group p-6 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-copper-500/50 hover:bg-zinc-800/50 transition-all">
+        <h3 class="font-medium text-white mb-2 group-hover:text-copper-400 transition-colors">CopperMoon Runtime</h3>
+        <p class="text-sm text-zinc-400">A Lua 5.4 runtime built in Rust with async I/O and modern APIs.</p>
+    </a>
+
+    <a href="/docs/honeymoon/overview" class="group p-6 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-copper-500/50 hover:bg-zinc-800/50 transition-all">
+        <h3 class="font-medium text-white mb-2 group-hover:text-copper-400 transition-colors">HoneyMoon Framework</h3>
+        <p class="text-sm text-zinc-400">Express.js-style web framework with routing, middleware, and validation.</p>
+    </a>
+
+    <a href="/docs/vein/overview" class="group p-6 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-copper-500/50 hover:bg-zinc-800/50 transition-all">
+        <h3 class="font-medium text-white mb-2 group-hover:text-copper-400 transition-colors">Vein Templating</h3>
+        <p class="text-sm text-zinc-400">Powerful Lua-inspired templating engine with filters and layouts.</p>
+    </a>
+
+    <a href="/docs/shipyard/overview" class="group p-6 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-copper-500/50 hover:bg-zinc-800/50 transition-all">
+        <h3 class="font-medium text-white mb-2 group-hover:text-copper-400 transition-colors">Shipyard CLI</h3>
+        <p class="text-sm text-zinc-400">Project scaffolding, development server, and build tools.</p>
+    </a>
+
+    <a href="/docs/harbor/overview" class="group p-6 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-copper-500/50 hover:bg-zinc-800/50 transition-all">
+        <h3 class="font-medium text-white mb-2 group-hover:text-copper-400 transition-colors">Harbor Packages</h3>
+        <p class="text-sm text-zinc-400">Package manager for sharing and installing Lua modules.</p>
+    </a>
+
+    <a href="/docs/guides/rest-api" class="group p-6 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-copper-500/50 hover:bg-zinc-800/50 transition-all">
+        <h3 class="font-medium text-white mb-2 group-hover:text-copper-400 transition-colors">Guides</h3>
+        <p class="text-sm text-zinc-400">Step-by-step tutorials for building real-world applications.</p>
+    </a>
+</div>
+
+<h2 class="text-2xl font-semibold text-center mt-20 mb-10 tracking-tight">Why CopperMoon?</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16">
+    <div class="p-6 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
+        <h3 class="font-medium text-white mb-2">Blazing Fast</h3>
+        <p class="text-sm text-zinc-400">Powered by Rust with async I/O. Handle thousands of concurrent connections.</p>
+    </div>
+
+    <div class="p-6 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
+        <h3 class="font-medium text-white mb-2">Simple & Elegant</h3>
+        <p class="text-sm text-zinc-400">Lua's clean syntax makes code readable. No complex build steps.</p>
+    </div>
+
+    <div class="p-6 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
+        <h3 class="font-medium text-white mb-2">Batteries Included</h3>
+        <p class="text-sm text-zinc-400">HTTP server, JSON, file system, time utilities built right in.</p>
+    </div>
+
+    <div class="p-6 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
+        <h3 class="font-medium text-white mb-2">Full Stack Ready</h3>
+        <p class="text-sm text-zinc-400">REST APIs to full web apps with templating and authentication.</p>
+    </div>
+</div>
+
+<h2 class="text-2xl font-semibold text-center mt-20 mb-10 tracking-tight">Quick Example</h2>
+
+<pre class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 overflow-x-auto mb-16"><code class="text-sm font-mono text-zinc-300"><span class="text-copper-400">local</span> honeymoon = <span class="text-copper-400">require</span>(<span class="text-green-400">"honeymoon"</span>)
+<span class="text-copper-400">local</span> app = honeymoon.new()
+
+<span class="text-zinc-500">-- Middleware</span>
+app:use(honeymoon.logger())
+app:use(honeymoon.json())
+
+<span class="text-zinc-500">-- Routes</span>
+app:get(<span class="text-green-400">"/"</span>, <span class="text-copper-400">function</span>(req, res)
+    res:json({
+        message = <span class="text-green-400">"Hello, CopperMoon!"</span>,
+        version = _COPPERMOON_VERSION
+    })
+<span class="text-copper-400">end</span>)
+
+app:get(<span class="text-green-400">"/users/:id"</span>, <span class="text-copper-400">function</span>(req, res)
+    <span class="text-copper-400">local</span> user = db.find(<span class="text-green-400">"users"</span>, req.params.id)
+    res:json(user)
+<span class="text-copper-400">end</span>)
+
+app:listen(<span class="text-orange-400">3000</span>)</code></pre>
+{% endblock %}

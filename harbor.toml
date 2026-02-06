@@ -1,0 +1,28 @@
+[package]
+name = "coppermine"
+version = "0.1.0"
+description = "Documentation for CopperMoon ecosystem"
+author = "CopperMoon Team"
+license = "MIT"
+repository = ""
+keywords = []
+main = "app.lua"
+
+[dependencies.lantern]
+path = "../../packages/lantern"
+
+[dependencies.vein]
+git = "https://github.com/coppermoondev/vein.git"
+
+[dependencies.tailwind]
+path = "../../packages/tailwind"
+
+[dependencies.ember]
+path = "../../packages/ember"
+
+[dependencies.honeymoon]
+path = "../../packages/honeymoon"
+
+[dev-dependencies]
+
+[scripts]

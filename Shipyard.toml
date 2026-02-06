@@ -1,0 +1,12 @@
+[project]
+name = "coppermine"
+version = "0.1.0"
+description = "Documentation for CopperMoon ecosystem"
+author = "CopperMoon Team"
+
+[lua]
+entry = "app.lua"
+
+[server]
+port = 3000
+host = "127.0.0.1"

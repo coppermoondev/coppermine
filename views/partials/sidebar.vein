@@ -1,0 +1,48 @@
+<aside class="fixed left-0 top-16 bottom-0 w-64 bg-black border-r border-zinc-800/50 overflow-y-auto sidebar-scrollbar">
+    <nav class="py-4" aria-label="Documentation">
+        {% for group in docs.groups do %}
+
+            {% if group.label then %}
+            <div class="mt-5 mb-2 px-5 flex items-center gap-3">
+                <span class="text-[10px] font-semibold uppercase tracking-widest text-zinc-600">{{ group.label }}</span>
+                <div class="flex-1 h-px bg-zinc-800/60"></div>
+            </div>
+            {% end %}
+
+            {% for _, sectionId in ipairs(group.sectionIds) do %}
+                {% set section = docs.sectionById[sectionId] %}
+                {% if section then %}
+                    {% set isActive = currentSection and currentSection.id == section.id %}
+                    <div class="mb-0.5">
+                        <button type="button"
+                                class="sidebar-section-btn w-full flex items-center gap-2.5 px-5 py-2 text-[13px] font-medium transition-colors duration-150 {% if isActive then %}text-copper-400{% else %}text-zinc-400 hover:text-zinc-200{% end %}"
+                                data-section="{{ section.id }}"
+                                aria-expanded="{% if isActive then %}true{% else %}false{% end %}">
+                            <span class="{% if isActive then %}text-copper-500{% else %}text-zinc-600{% end %} transition-colors">
+                                {! docs.icons[section.icon] !}
+                            </span>
+                            <span class="flex-1 text-left truncate">{{ section.title }}</span>
+                            <svg class="sidebar-chevron w-3 h-3 text-zinc-600 transition-transform duration-200 {% if isActive then %}rotate-90{% end %}" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+
+                        <div class="sidebar-pages {% if isActive then %}sidebar-pages-open{% end %}" data-section-pages="{{ section.id }}">
+                            <ul class="py-0.5">
+                                {% for page in section.pages do %}
+                                <li>
+                                    <a href="/docs/{{ section.id }}/{{ page.id }}"
+                                       class="sidebar-link {% if currentSection and currentPage and currentSection.id == section.id and currentPage.id == page.id then %}active{% end %}">
+                                        {{ page.title }}
+                                    </a>
+                                </li>
+                                {% end %}
+                            </ul>
+                        </div>
+                    </div>
+                {% end %}
+            {% end %}
+
+        {% end %}
+    </nav>
+</aside>

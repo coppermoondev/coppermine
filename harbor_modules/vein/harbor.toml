@@ -1,0 +1,16 @@
+[package]
+name = "vein"
+version = "0.2.0"
+description = "A powerful, Lua-inspired templating engine for CopperMoon with metrics, fragments, and source maps"
+main = "init.lua"
+author = "CopperMoon Team"
+license = "MIT"
+keywords = ["template", "templating", "vein", "lua", "html"]
+
+[dependencies]
+
+[dev-dependencies]
+assay = { path = "../assay" }
+
+[scripts]
+test = "coppermoon tests/init.lua"

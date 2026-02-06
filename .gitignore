@@ -1,0 +1,24 @@
+# Dependencies
+# harbor_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+harbor-modules/
+harbor.lock

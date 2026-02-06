@@ -1,0 +1,20 @@
+{% extends "layouts/base" %}
+
+{% block content %}
+<div class="text-center py-24">
+    <h1 class="text-8xl font-bold bg-gradient-to-r from-zinc-600 to-zinc-400 bg-clip-text text-transparent mb-6">404</h1>
+    <p class="text-xl text-zinc-400 mb-10">
+        The page you're looking for doesn't exist or has been moved.
+    </p>
+    <div class="flex gap-4 justify-center">
+        <a href="/" 
+           class="px-6 py-3 bg-gradient-to-r from-copper-500 to-orange-500 text-black font-medium rounded-lg hover:opacity-90 transition-opacity">
+            Go Home
+        </a>
+        <a href="/docs/getting-started/introduction" 
+           class="px-6 py-3 border border-zinc-700 text-white font-medium rounded-lg hover:bg-zinc-800 hover:border-zinc-600 transition-all">
+            Read Docs
+        </a>
+    </div>
+</div>
+{% endblock %}

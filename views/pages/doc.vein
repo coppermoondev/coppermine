@@ -1,0 +1,125 @@
+{% extends "layouts/base" %}
+
+{% block sidebar %}
+{@ include "partials/sidebar" @}
+{% endblock %}
+
+{% block content %}
+{% if currentSection then %}
+<nav class="flex items-center gap-2 text-sm text-zinc-500 mb-8">
+    <a href="/docs/{{ currentSection.id }}" class="hover:text-zinc-300 transition-colors">{{ currentSection.title }}</a>
+    {% if currentPage then %}
+    <span class="text-zinc-700">/</span>
+    <span class="text-zinc-400">{{ currentPage.title }}</span>
+    {% end %}
+</nav>
+{% end %}
+
+<article class="doc-content">
+    {! content | markdown !}
+</article>
+
+{% if currentSection and currentPage then %}
+<nav class="flex justify-between gap-4 mt-16 pt-8 border-t border-zinc-800">
+    {% for i, page in ipairs(currentSection.pages) do %}
+        {% if page.id == currentPage.id then %}
+            {% if i > 1 then %}
+            <a href="/docs/{{ currentSection.id }}/{{ currentSection.pages[i-1].id }}"
+               class="flex-1 max-w-[45%] p-4 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-copper-500/50 hover:bg-zinc-800/50 transition-all group">
+                <span class="text-xs uppercase tracking-wider text-zinc-500 mb-1 block">Previous</span>
+                <span class="font-medium text-white group-hover:text-copper-400 transition-colors">{{ currentSection.pages[i-1].title }}</span>
+            </a>
+            {% else %}
+            <div></div>
+            {% end %}
+
+            {% if i < #currentSection.pages then %}
+            <a href="/docs/{{ currentSection.id }}/{{ currentSection.pages[i+1].id }}"
+               class="flex-1 max-w-[45%] p-4 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-copper-500/50 hover:bg-zinc-800/50 transition-all text-right group">
+                <span class="text-xs uppercase tracking-wider text-zinc-500 mb-1 block">Next</span>
+                <span class="font-medium text-white group-hover:text-copper-400 transition-colors">{{ currentSection.pages[i+1].title }}</span>
+            </a>
+            {% end %}
+        {% end %}
+    {% end %}
+</nav>
+{% end %}
+
+{% if toc and #toc > 0 then %}
+<div class="toc-panel" id="toc-panel">
+    <div class="text-[11px] font-semibold uppercase tracking-widest text-zinc-600 mb-3">On this page</div>
+    <ul>
+        {% for entry in toc do %}
+        <li>
+            <a href="#{{ entry.id }}"
+               class="toc-link {% if entry.level == 3 then %}toc-link-nested{% end %}"
+               data-toc-id="{{ entry.id }}">
+                {{ entry.title }}
+            </a>
+        </li>
+        {% end %}
+    </ul>
+</div>
+{% end %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    // Sidebar section toggle
+    document.querySelectorAll('.sidebar-section-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var sectionId = this.getAttribute('data-section');
+            var pages = document.querySelector('[data-section-pages="' + sectionId + '"]');
+            var isOpen = this.getAttribute('aria-expanded') === 'true';
+            if (isOpen) {
+                this.setAttribute('aria-expanded', 'false');
+                pages.classList.remove('sidebar-pages-open');
+            } else {
+                this.setAttribute('aria-expanded', 'true');
+                pages.classList.add('sidebar-pages-open');
+            }
+        });
+    });
+
+    // Table of contents scroll spy
+    var tocLinks = document.querySelectorAll('.toc-link');
+    if (tocLinks.length === 0) return;
+
+    var headingIds = [];
+    tocLinks.forEach(function(link) {
+        headingIds.push(link.getAttribute('data-toc-id'));
+    });
+
+    function updateActive() {
+        var active = null;
+        for (var i = 0; i < headingIds.length; i++) {
+            var el = document.getElementById(headingIds[i]);
+            if (el && el.getBoundingClientRect().top <= 100) {
+                active = headingIds[i];
+            }
+        }
+        tocLinks.forEach(function(link) {
+            if (link.getAttribute('data-toc-id') === active) {
+                link.classList.add('toc-link-active');
+            } else {
+                link.classList.remove('toc-link-active');
+            }
+        });
+    }
+
+    var ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            requestAnimationFrame(function() {
+                updateActive();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+    updateActive();
+})();
+</script>
+{% endblock %}

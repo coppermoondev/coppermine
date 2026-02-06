@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title | default(site.name) }}</title>
+    <meta name="description" content="{{ description | default(site.tagline) }}">
+
+    {# Fonts #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    {# TailwindCSS via CopperMoon Tailwind Package #}
+    {! __tailwind_head !}
+
+    <style type="text/tailwindcss">
+        @layer base {
+            html {
+                scroll-behavior: smooth;
+                scroll-padding-top: 5rem;
+            }
+            body {
+                @apply bg-black text-zinc-100 antialiased;
+            }
+            ::selection {
+                @apply bg-copper-500 text-black;
+            }
+            /* Auto-detect sidebar and add margin */
+            body:has(aside) main {
+                @apply ml-64;
+            }
+        }
+        @layer components {
+            /* Sidebar section toggle */
+            .sidebar-section-btn {
+                @apply cursor-pointer bg-transparent border-0 outline-none rounded-none;
+            }
+            .sidebar-section-btn:hover {
+                @apply bg-zinc-900/50;
+            }
+            /* Collapsible page list */
+            .sidebar-pages {
+                overflow: hidden;
+                max-height: 0;
+                opacity: 0;
+                transition: max-height 0.25s ease, opacity 0.2s ease;
+            }
+            .sidebar-pages-open {
+                max-height: 500px;
+                opacity: 1;
+            }
+            /* Chevron rotation */
+            .sidebar-section-btn[aria-expanded="true"] .sidebar-chevron {
+                @apply rotate-90;
+            }
+            /* Sidebar page links */
+            .sidebar-link {
+                @apply block pl-12 pr-5 py-1.5 text-[13px] text-zinc-500 border-l-2 border-transparent transition-all duration-150;
+            }
+            .sidebar-link:hover {
+                @apply text-zinc-300 bg-zinc-900/50;
+            }
+            .sidebar-link.active {
+                @apply text-copper-400 bg-copper-500/10 border-l-copper-500;
+            }
+            /* Sidebar scrollbar */
+            .sidebar-scrollbar::-webkit-scrollbar {
+                width: 4px;
+            }
+            .sidebar-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            .sidebar-scrollbar::-webkit-scrollbar-thumb {
+                @apply bg-zinc-800 rounded-full;
+            }
+            .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+                @apply bg-zinc-700;
+            }
+            /* Markdown content styling */
+            .doc-content h1 {
+                @apply text-3xl font-bold text-white mt-0 mb-6;
+            }
+            .doc-content h2 {
+                @apply text-2xl font-semibold text-white mt-12 mb-4 pb-3 border-b border-zinc-800;
+            }
+            .doc-content h3 {
+                @apply text-xl font-semibold text-white mt-8 mb-3;
+            }
+            .doc-content h4 {
+                @apply text-lg font-medium text-white mt-6 mb-2;
+            }
+            .doc-content p {
+                @apply text-zinc-400 leading-relaxed mb-4;
+            }
+            .doc-content ul, .doc-content ol {
+                @apply my-4 pl-6 space-y-2;
+            }
+            .doc-content ul {
+                @apply list-disc;
+            }
+            .doc-content ol {
+                @apply list-decimal;
+            }
+            .doc-content li {
+                @apply text-zinc-400;
+            }
+            .doc-content code:not(pre code) {
+                @apply bg-zinc-800 text-copper-400 px-1.5 py-0.5 rounded text-sm font-mono;
+            }
+            .doc-content pre {
+                @apply bg-zinc-900 border border-zinc-800 rounded-xl p-4 overflow-x-auto my-6;
+            }
+            .doc-content pre code {
+                @apply bg-transparent text-zinc-300 p-0 text-sm font-mono;
+            }
+            .doc-content a {
+                @apply text-copper-400 hover:text-copper-300 transition-colors;
+            }
+            .doc-content strong {
+                @apply text-zinc-200 font-medium;
+            }
+            .doc-content em {
+                @apply text-zinc-300 italic;
+            }
+            .doc-content blockquote {
+                @apply border-l-4 border-copper-500 pl-4 my-4 italic text-zinc-500;
+            }
+            /* Table of contents panel */
+            .toc-panel {
+                position: fixed;
+                top: 5rem;
+                right: 2rem;
+                width: 200px;
+                max-height: calc(100vh - 6rem);
+                overflow-y: auto;
+                display: none;
+            }
+            @media (min-width: 1440px) {
+                .toc-panel { display: block; }
+            }
+            .toc-panel ul {
+                @apply list-none p-0 m-0;
+            }
+            .toc-link {
+                @apply block py-1.5 text-[12px] text-zinc-600 border-l border-zinc-800 pl-3 transition-all duration-150 leading-snug;
+            }
+            .toc-link:hover {
+                @apply text-zinc-400;
+            }
+            .toc-link-nested {
+                @apply pl-6;
+            }
+            .toc-link-active {
+                @apply text-copper-400 border-l-copper-500;
+            }
+            .toc-panel::-webkit-scrollbar {
+                width: 2px;
+            }
+            .toc-panel::-webkit-scrollbar-thumb {
+                @apply bg-zinc-800 rounded-full;
+            }
+        }
+    </style>
+
+    {% block head %}{% endblock %}
+</head>
+<body class="min-h-screen bg-black">
+    {# Header #}
+    <header class="fixed top-0 left-0 right-0 h-16 bg-black/80 backdrop-blur-xl border-b border-zinc-800/50 z-50">
+        <div class="h-full flex items-center justify-between px-6">
+            <div class="flex items-center gap-4">
+                <a href="/" class="flex items-center gap-3 text-white font-semibold">
+                    <span class="w-7 h-7 bg-gradient-to-br from-copper-500 to-orange-500 rounded-md flex items-center justify-center text-[10px] font-bold text-black">Cu</span>
+                    <span class="tracking-tight">{{ site.name }}</span>
+                </a>
+            </div>
+
+            <div class="flex-1 flex justify-center px-8 max-w-xl">
+                <div class="relative w-full">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8" stroke-width="2"></circle>
+                        <path d="M21 21l-4.35-4.35" stroke-width="2"></path>
+                    </svg>
+                    <input type="text" 
+                           placeholder="Search documentation..." 
+                           class="w-full pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-copper-500/50 focus:ring-2 focus:ring-copper-500/20 transition-all">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-1">
+                <a href="/docs/getting-started/introduction" class="px-3 py-2 text-sm text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 transition-colors">Docs</a>
+                <a href="{{ site.github }}" target="_blank" class="px-3 py-2 text-sm text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 transition-colors">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex pt-16 min-h-screen">
+        {% block sidebar %}{% endblock %}
+
+        <main class="flex-1" id="main-content">
+            <div class="max-w-3xl mx-auto px-6 py-12">
+                {% block content %}{% endblock %}
+            </div>
+
+            <footer class="border-t border-zinc-800/50 mt-16">
+                <div class="max-w-3xl mx-auto px-6 py-8 text-center text-sm text-zinc-500">
+                    <p>Built with CopperMoon + HoneyMoon + Vein</p>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

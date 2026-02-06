@@ -418,6 +418,7 @@ local docs = {
             pages = {
                 { id = "overview", title = "Overview" },
                 { id = "commands", title = "Commands" },
+                { id = "git-deploy", title = "Git Deployment" },
                 { id = "configuration", title = "Configuration" },
                 { id = "process-management", title = "Process Management" },
             }

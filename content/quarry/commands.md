@@ -4,11 +4,13 @@ Complete reference for all Quarry CLI commands. In every command that takes a ta
 
 ## start
 
-Start a CopperMoon app as a managed background process.
+Start a CopperMoon app as a managed background process. The script can be a local `.lua` file or a Git repository URL.
 
 ```bash
 quarry start <script> [options] [-- <args>]
 ```
+
+### Local script
 
 | Argument | Required | Description |
 |----------|----------|-------------|
@@ -40,6 +42,40 @@ quarry start server.lua \
   --kill-timeout 5000 \
   -- --port 8080
 ```
+
+### Git repository
+
+When the script argument is a Git URL (`https://`, `http://`, `git@`, or ends with `.git`), Quarry clones the repository and manages it as a git-deployed process.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `script` | Yes | Git repository URL |
+| `--entry-point, -e` | No | Lua script to run inside the repo (default: `main.lua`) |
+| `--branch, -b` | No | Git branch to track (default: auto-detect) |
+| `--name, -n` | No | Process name (defaults to repo name) |
+| `--poll-interval` | No | Seconds between remote checks for new commits (default: 60) |
+| `--max-restarts` | No | Max restarts before errored state (default: 16) |
+| `--restart-delay` | No | Delay between restarts in ms (default: 1000) |
+| `--min-uptime` | No | Min uptime in ms to consider launch stable (default: 5000) |
+| `--kill-timeout` | No | Grace period before SIGKILL in ms (default: 5000) |
+
+```bash
+# SSH (recommended for private repos)
+quarry start git@github.com:user/my-app.git --entry-point app.lua
+
+# HTTPS (public repos)
+quarry start https://github.com/user/my-app --entry-point app.lua
+
+# With options
+quarry start git@github.com:myorg/api.git \
+  --entry-point app.lua \
+  --name api \
+  --branch main \
+  --poll-interval 30 \
+  --max-restarts 0
+```
+
+On first launch, the process is registered in **stopped** state so you can configure the app (e.g. add a `.env` file). Run `quarry restart <name>` to start it. See [Git Deployment](/docs/quarry/git-deploy) for the full workflow.
 
 ## stop
 
@@ -165,6 +201,13 @@ Process Information
   Memory:          15.2 MB
   Watch:           disabled
   Args:            --port 3000
+```
+
+For git-deployed processes, additional fields are shown:
+
+```
+  Git URL:         git@github.com:user/my-app.git
+  Git Branch:      main
 ```
 
 ## monit

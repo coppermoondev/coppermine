@@ -15,6 +15,7 @@ quarry --version
 | Command | Purpose |
 |---------|---------|
 | `quarry start script.lua` | Start an app as a managed background process |
+| `quarry start <git-url>` | Deploy an app from a Git repository |
 | `quarry stop name\|id\|all` | Stop process(es) gracefully |
 | `quarry restart name\|id\|all` | Restart process(es) |
 | `quarry delete name\|id\|all` | Stop and remove from process list |
@@ -39,6 +40,14 @@ quarry start app.lua --name my-api
 ```
 
 This launches `app.lua` as a background process managed by the Quarry daemon. The daemon auto-starts on the first CLI command if it isn't already running.
+
+### Deploy from a Git repository
+
+```bash
+quarry start git@github.com:user/my-app.git --entry-point app.lua
+```
+
+Quarry clones the repository, registers the process in stopped state (so you can configure `.env`), and then watches for new commits to auto-update. See [Git Deployment](/docs/quarry/git-deploy) for the full workflow.
 
 ### Check running processes
 
@@ -101,6 +110,7 @@ All process data is stored in `~/.quarry/`:
 ## Features
 
 - **Auto-restart** on crash with configurable limits and exponential backoff
+- **Git deployment** with auto-update on new commits
 - **Graceful shutdown** with SIGTERM, then SIGKILL after timeout
 - **CPU and memory monitoring** via sysinfo, refreshed every 3 seconds
 - **Log management** with per-process stdout/stderr files
@@ -112,5 +122,6 @@ All process data is stored in `~/.quarry/`:
 ## Next Steps
 
 - [Commands](/docs/quarry/commands) - Detailed reference for every command
+- [Git Deployment](/docs/quarry/git-deploy) - Deploy from Git repos with auto-update
 - [Configuration](/docs/quarry/configuration) - quarry.toml config file reference
 - [Process Management](/docs/quarry/process-management) - Auto-restart, save/resurrect, systemd

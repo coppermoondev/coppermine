@@ -1,0 +1,14 @@
+[package]
+name = "ember"
+version = "0.1.0"
+description = "A structured logging library for CopperMoon — fast, extensible, with transports and child loggers"
+author = "CopperMoon Team"
+license = "MIT"
+repository = "https://github.com/coppermoon/ember"
+keywords = ["logging", "logger", "structured", "transport", "debug"]
+main = "init.lua"
+
+[dependencies]
+
+[dev-dependencies]
+assay = { path = "../assay" }

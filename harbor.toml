@@ -8,20 +8,20 @@ repository = ""
 keywords = []
 main = "app.lua"
 
-[dependencies.lantern]
-path = "../../packages/lantern"
-
-[dependencies.vein]
-git = "https://github.com/coppermoondev/vein.git"
-
 [dependencies.tailwind]
-path = "../../packages/tailwind"
-
-[dependencies.ember]
-path = "../../packages/ember"
+version = "0.1.0"
 
 [dependencies.honeymoon]
-path = "../../packages/honeymoon"
+version = "0.1.0"
+
+[dependencies.vein]
+version = "0.2.0"
+
+[dependencies.ember]
+version = "0.1.0"
+
+[dependencies.lantern]
+version = "0.1.1"
 
 [dev-dependencies]
 

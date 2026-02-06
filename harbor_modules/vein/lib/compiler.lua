@@ -389,6 +389,13 @@ local function generate_code(tokens, engine, options)
                 elseif transformed:match("^set%s+") then
                     transformed = transformed:gsub("^set%s+", "local ")
 
+                -- for k, v in table (without do) → for k, v in pairs(table) do
+                elseif transformed:match("^for%s+[%w_]+%s*,%s*[%w_]+%s+in%s+[^%s]+%s*$") then
+                    local k, v, tbl = transformed:match("^for%s+([%w_]+)%s*,%s*([%w_]+)%s+in%s+([^%s]+)%s*$")
+                    if k and v and tbl then
+                        transformed = string.format("for %s, %s in pairs(%s) do", k, v, tbl)
+                    end
+
                 -- for x in table (without do) → for _, x in ipairs(table) do
                 elseif transformed:match("^for%s+[%w_]+%s+in%s+[^%s]+%s*$") then
                     local var, tbl = transformed:match("^for%s+([%w_]+)%s+in%s+([^%s]+)%s*$")

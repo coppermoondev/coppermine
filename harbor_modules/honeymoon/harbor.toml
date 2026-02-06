@@ -1,0 +1,13 @@
+[package]
+name = "honeymoon"
+version = "0.1.0"
+description = "A fast, minimalist web framework for CopperMoon"
+author = "CopperMoon Contributors"
+license = "MIT"
+repository = "https://github.com/coppermoon/honeymoon"
+keywords = ["web", "framework", "http", "server", "routing"]
+main = "init.lua"
+
+[dependencies]
+
+[dev-dependencies]

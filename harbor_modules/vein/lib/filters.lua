@@ -734,6 +734,155 @@ function filters.ternary(value, trueValue, falseValue)
 end
 
 --------------------------------------------------------------------------------
+-- Markdown Filter
+--------------------------------------------------------------------------------
+
+--- Convert markdown to HTML
+---@param value any Markdown text
+---@return string HTML output
+function filters.markdown(value)
+    if value == nil then
+        return ""
+    end
+    local text = tostring(value)
+
+    -- Normalize line endings
+    text = text:gsub("\r\n", "\n")
+
+    -- Fenced code blocks (```lang ... ```)
+    text = text:gsub("```(%w*)\n(.-)\n```", function(lang, code)
+        code = filters.escape(code)
+        if lang and lang ~= "" then
+            return '<pre><code class="language-' .. lang .. '">' .. code .. '</code></pre>'
+        else
+            return "<pre><code>" .. code .. "</code></pre>"
+        end
+    end)
+
+    -- Split into lines for block-level processing
+    local lines = {}
+    for line in (text .. "\n"):gmatch("(.-)\n") do
+        table.insert(lines, line)
+    end
+
+    local html = {}
+    local i = 1
+    local in_list = false
+    local list_type = nil
+
+    local function close_list()
+        if in_list then
+            table.insert(html, list_type == "ol" and "</ol>" or "</ul>")
+            in_list = false
+            list_type = nil
+        end
+    end
+
+    local function inline(s)
+        -- Images ![alt](src)
+        s = s:gsub("!%[(.-)%]%((.-)%)", '<img src="%2" alt="%1">')
+        -- Links [text](url)
+        s = s:gsub("%[(.-)%]%((.-)%)", '<a href="%2">%1</a>')
+        -- Bold **text** or __text__
+        s = s:gsub("%*%*(.-)%*%*", "<strong>%1</strong>")
+        s = s:gsub("__(.-)__", "<strong>%1</strong>")
+        -- Italic *text* or _text_
+        s = s:gsub("%*(.-)%*", "<em>%1</em>")
+        -- Inline code `code`
+        s = s:gsub("`([^`]+)`", function(code)
+            return "<code>" .. filters.escape(code) .. "</code>"
+        end)
+        return s
+    end
+
+    while i <= #lines do
+        local line = lines[i]
+
+        -- Skip lines inside <pre> blocks (already handled)
+        if line:match("^<pre>") then
+            close_list()
+            -- Collect until </pre>
+            while i <= #lines do
+                table.insert(html, lines[i])
+                if lines[i]:match("</pre>$") then break end
+                i = i + 1
+            end
+            i = i + 1
+        -- Headers
+        elseif line:match("^######%s") then
+            close_list()
+            table.insert(html, "<h6>" .. inline(line:sub(8)) .. "</h6>")
+            i = i + 1
+        elseif line:match("^#####%s") then
+            close_list()
+            table.insert(html, "<h5>" .. inline(line:sub(7)) .. "</h5>")
+            i = i + 1
+        elseif line:match("^####%s") then
+            close_list()
+            table.insert(html, "<h4>" .. inline(line:sub(6)) .. "</h4>")
+            i = i + 1
+        elseif line:match("^###%s") then
+            close_list()
+            table.insert(html, "<h3>" .. inline(line:sub(5)) .. "</h3>")
+            i = i + 1
+        elseif line:match("^##%s") then
+            close_list()
+            table.insert(html, "<h2>" .. inline(line:sub(4)) .. "</h2>")
+            i = i + 1
+        elseif line:match("^#%s") then
+            close_list()
+            table.insert(html, "<h1>" .. inline(line:sub(3)) .. "</h1>")
+            i = i + 1
+        -- Horizontal rule
+        elseif line:match("^%-%-%-+%s*$") or line:match("^%*%*%*+%s*$") then
+            close_list()
+            table.insert(html, "<hr>")
+            i = i + 1
+        -- Unordered list
+        elseif line:match("^%s*[%-*]%s+") then
+            if not in_list or list_type ~= "ul" then
+                close_list()
+                table.insert(html, "<ul>")
+                in_list = true
+                list_type = "ul"
+            end
+            local content = line:match("^%s*[%-*]%s+(.+)")
+            table.insert(html, "<li>" .. inline(content) .. "</li>")
+            i = i + 1
+        -- Ordered list
+        elseif line:match("^%s*%d+%.%s+") then
+            if not in_list or list_type ~= "ol" then
+                close_list()
+                table.insert(html, "<ol>")
+                in_list = true
+                list_type = "ol"
+            end
+            local content = line:match("^%s*%d+%.%s+(.+)")
+            table.insert(html, "<li>" .. inline(content) .. "</li>")
+            i = i + 1
+        -- Blockquote
+        elseif line:match("^>%s?") then
+            close_list()
+            local content = line:match("^>%s?(.*)")
+            table.insert(html, "<blockquote><p>" .. inline(content) .. "</p></blockquote>")
+            i = i + 1
+        -- Empty line
+        elseif line:match("^%s*$") then
+            close_list()
+            i = i + 1
+        -- Paragraph
+        else
+            close_list()
+            table.insert(html, "<p>" .. inline(line) .. "</p>")
+            i = i + 1
+        end
+    end
+
+    close_list()
+    return table.concat(html, "\n")
+end
+
+--------------------------------------------------------------------------------
 -- Debug Filters
 --------------------------------------------------------------------------------
 

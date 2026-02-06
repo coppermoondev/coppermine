@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="100%" stop-color="#171717"/>
+    </linearGradient>
+    <linearGradient id="copper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d4945a"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <!-- Decorative orb -->
+  <circle cx="900" cy="200" r="300" fill="rgba(217,119,6,0.06)"/>
+  <!-- Logo -->
+  <rect x="80" y="180" width="64" height="64" rx="16" fill="url(#copper)"/>
+  <text x="112" y="222" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="28" fill="#000">Cu</text>
+  <!-- Title -->
+  <text x="170" y="215" font-family="system-ui,sans-serif" font-weight="800" font-size="48" fill="#fafafa">CopperMine</text>
+  <!-- Tagline -->
+  <text x="80" y="300" font-family="system-ui,sans-serif" font-weight="500" font-size="28" fill="#d4945a">Documentation for the CopperMoon Ecosystem</text>
+  <!-- Description -->
+  <text x="80" y="360" font-family="system-ui,sans-serif" font-weight="400" font-size="20" fill="#a1a1aa">Comprehensive guides for CopperMoon, HoneyMoon, Freight, Vein,</text>
+  <text x="80" y="390" font-family="system-ui,sans-serif" font-weight="400" font-size="20" fill="#a1a1aa">Harbor, Shipyard, and the full Lua ecosystem.</text>
+  <!-- URL -->
+  <text x="80" y="530" font-family="monospace" font-weight="500" font-size="18" fill="#71717a">docs.coppermoon.dev</text>
+  <!-- Bottom accent line -->
+  <rect x="0" y="620" width="1200" height="10" fill="url(#copper)"/>
+</svg>

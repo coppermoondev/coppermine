@@ -1,0 +1,10 @@
+[package]
+name = "tailwind"
+version = "0.1.0"
+description = "TailwindCSS integration for HoneyMoon/CopperMoon"
+author = "CopperMoon Team"
+license = "MIT"
+main = "init.lua"
+keywords = ["tailwind", "css", "styling", "honeymoon"]
+
+[dependencies]

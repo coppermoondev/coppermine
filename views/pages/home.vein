@@ -1,5 +1,45 @@
 {% extends "layouts/base" %}
 
+{% block head %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{ site.name }}",
+    "url": "{{ site.url }}",
+    "description": "{{ site.description }}",
+    "publisher": {
+        "@type": "Organization",
+        "name": "CopperMoon",
+        "url": "https://coppermoon.dev",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ site.url }}/public/favicon.svg"
+        }
+    },
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ site.url }}/api/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+    },
+    "about": {
+        "@type": "SoftwareApplication",
+        "name": "CopperMoon",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Linux, macOS, Windows",
+        "url": "https://github.com/coppermoondev/coppermoon",
+        "description": "A blazing-fast Lua 5.4 runtime built in Rust with async I/O and modern APIs.",
+        "programmingLanguage": ["Lua", "Rust"],
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="text-center py-16">
     <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6">

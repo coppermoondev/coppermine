@@ -32,8 +32,11 @@ tailwind.setup(app, tailwindConfig)
 app.views:global("site", {
     name = "CopperMine",
     tagline = "Documentation for CopperMoon Ecosystem",
+    description = "Comprehensive documentation for the CopperMoon ecosystem — runtime, web framework, ORM, templating, tooling, and community packages.",
     version = "0.1.0",
-    github = "https://github.com/coppermoon/coppermoon",
+    url = os_ext.env("SITE_URL") or "https://docs.coppermoon.dev",
+    year = os.date("%Y"),
+    github = "https://github.com/coppermoondev/coppermoon",
 })
 
 -- Add custom filters
@@ -654,10 +657,32 @@ app.views:global("docs", docs)
 -- Routes
 --------------------------------------------------------------------------------
 
+-- robots.txt
+app:get("/robots.txt", function(req, res)
+    res:header("Content-Type", "text/plain; charset=utf-8")
+    res:send("User-agent: *\nAllow: /\n\nSitemap: " .. (os_ext.env("SITE_URL") or "https://docs.coppermoon.dev") .. "/sitemap.xml\n")
+end)
+
+-- sitemap.xml (dynamic based on docs structure)
+app:get("/sitemap.xml", function(req, res)
+    local baseUrl = os_ext.env("SITE_URL") or "https://docs.coppermoon.dev"
+    local urls = {
+        '  <url>\n    <loc>' .. baseUrl .. '/</loc>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>',
+    }
+    for _, section in ipairs(docs.sections) do
+        for _, page in ipairs(section.pages) do
+            table.insert(urls, '  <url>\n    <loc>' .. baseUrl .. '/docs/' .. section.id .. '/' .. page.id .. '</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>')
+        end
+    end
+    res:header("Content-Type", "application/xml; charset=utf-8")
+    res:send('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' .. table.concat(urls, "\n") .. '\n</urlset>')
+end)
+
 -- Home page
 app:get("/", function(req, res)
     res:render("pages/home", {
-        title = "CopperMine - Documentation",
+        title = "CopperMine — Documentation for CopperMoon",
+        canonical_path = "/",
         currentSection = nil,
         currentPage = nil,
     })
@@ -739,7 +764,10 @@ app:get("/docs/:section/:page", function(req, res)
     local toc = extractToc(content)
 
     res:render("pages/doc", {
-        title = page.title .. " - " .. section.title .. " - CopperMine",
+        title = page.title .. " — " .. section.title .. " — CopperMine",
+        meta_description = section.title .. ": " .. page.title .. " — CopperMoon documentation.",
+        canonical_path = "/docs/" .. sectionId .. "/" .. pageId,
+        og_title = page.title .. " — " .. section.title,
         currentSection = section,
         currentPage = page,
         content = content,

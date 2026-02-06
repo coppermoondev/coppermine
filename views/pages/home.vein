@@ -14,7 +14,7 @@
         "url": "https://coppermoon.dev",
         "logo": {
             "@type": "ImageObject",
-            "url": "{{ site.url }}/public/favicon.svg"
+            "url": "{{ site.url }}/public/logo.png"
         }
     },
     "potentialAction": {

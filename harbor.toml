@@ -8,14 +8,14 @@ repository = ""
 keywords = []
 main = "app.lua"
 
-[dependencies.tailwind]
-version = "0.1.0"
-
 [dependencies.honeymoon]
-version = "0.1.0"
+version = "0.1.1"
 
 [dependencies.vein]
 version = "0.2.0"
+
+[dependencies.tailwind]
+version = "0.1.0"
 
 [dependencies.ember]
 version = "0.1.0"

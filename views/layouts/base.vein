@@ -139,10 +139,19 @@
                 @apply bg-zinc-800 text-copper-400 px-1.5 py-0.5 rounded text-sm font-mono;
             }
             .doc-content pre {
-                @apply bg-zinc-900 border border-zinc-800 rounded-xl p-4 overflow-x-auto my-6;
+                @apply bg-zinc-900 border border-zinc-800 rounded-xl p-4 overflow-x-auto my-0;
             }
             .doc-content pre code {
-                @apply bg-transparent text-zinc-300 p-0 text-sm font-mono;
+                @apply bg-transparent p-0 text-sm font-mono;
+            }
+            .doc-content pre code.hljs {
+                @apply bg-transparent p-0;
+            }
+            .doc-content .hljs-container {
+                @apply my-6;
+            }
+            .doc-content .hljs-container .hljs-lang-label {
+                @apply text-zinc-600;
             }
             .doc-content a {
                 @apply text-copper-400 hover:text-copper-300 transition-colors;
@@ -193,6 +202,8 @@
         }
     </style>
 
+    {! highlight_head() !}
+
     {% block head %}{% endblock %}
 </head>
 <body class="min-h-screen bg-black">
@@ -242,5 +253,6 @@
     </div>
 
     {% block scripts %}{% endblock %}
+    {! highlight_init() !}
 </body>
 </html>

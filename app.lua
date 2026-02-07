@@ -6,6 +6,7 @@ local vein = require("vein")
 local tailwind = require("tailwind")
 local lantern = require("lantern")
 local ember = require("ember")
+local highlight = require("highlight")
 
 local app = honeymoon.new()
 
@@ -38,6 +39,14 @@ app.views:global("site", {
     year = os.date("%Y"),
     github = "https://github.com/coppermoondev/coppermoon",
 })
+
+-- Setup syntax highlighting
+local hl = highlight.new({
+    theme = "github-dark",
+    copyButton = true,
+    showLanguage = true,
+})
+hl:vein(app.views)
 
 -- Add custom filters
 -- Slugify a heading text for use as an anchor ID
@@ -183,12 +192,8 @@ app.views:filter("markdown", function(text)
             code_block_lang = code_start
             code_block_content = {}
         elseif line:match("^```$") and in_code_block then
-            local code = escape_html(table.concat(code_block_content, "\n"))
-            if code_block_lang ~= "" then
-                table.insert(html, '<pre><code class="language-' .. code_block_lang .. '">' .. code .. '</code></pre>')
-            else
-                table.insert(html, '<pre><code>' .. code .. '</code></pre>')
-            end
+            local raw_code = table.concat(code_block_content, "\n")
+            table.insert(html, hl:render(raw_code, code_block_lang))
             in_code_block = false
             code_block_lang = ""
         elseif in_code_block then

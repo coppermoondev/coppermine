@@ -64,14 +64,7 @@
     </div>
 
     <div class="max-w-lg mx-auto">
-        <pre class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 text-left overflow-x-auto"><code class="text-sm font-mono text-zinc-300"><span class="text-zinc-500">-- Quick install</span>
-curl -fsSL https://coppermoon.dev/install.sh | sh
-
-<span class="text-zinc-500">-- Create a new project</span>
-shipyard new my-app --template web
-
-<span class="text-zinc-500">-- Start development</span>
-cd my-app && shipyard dev</code></pre>
+        {! highlight_code("bash", "# Quick install\ncurl -fsSL https://coppermoon.dev/install.sh | sh\n\n# Create a new project\nshipyard new my-app --template web\n\n# Start development\ncd my-app && shipyard dev") !}
     </div>
 </div>
 
@@ -135,25 +128,5 @@ cd my-app && shipyard dev</code></pre>
 
 <h2 class="text-2xl font-semibold text-center mt-20 mb-10 tracking-tight">Quick Example</h2>
 
-<pre class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 overflow-x-auto mb-16"><code class="text-sm font-mono text-zinc-300"><span class="text-copper-400">local</span> honeymoon = <span class="text-copper-400">require</span>(<span class="text-green-400">"honeymoon"</span>)
-<span class="text-copper-400">local</span> app = honeymoon.new()
-
-<span class="text-zinc-500">-- Middleware</span>
-app:use(honeymoon.logger())
-app:use(honeymoon.json())
-
-<span class="text-zinc-500">-- Routes</span>
-app:get(<span class="text-green-400">"/"</span>, <span class="text-copper-400">function</span>(req, res)
-    res:json({
-        message = <span class="text-green-400">"Hello, CopperMoon!"</span>,
-        version = _COPPERMOON_VERSION
-    })
-<span class="text-copper-400">end</span>)
-
-app:get(<span class="text-green-400">"/users/:id"</span>, <span class="text-copper-400">function</span>(req, res)
-    <span class="text-copper-400">local</span> user = db.find(<span class="text-green-400">"users"</span>, req.params.id)
-    res:json(user)
-<span class="text-copper-400">end</span>)
-
-app:listen(<span class="text-orange-400">3000</span>)</code></pre>
+{! highlight_code("lua", 'local honeymoon = require("honeymoon")\nlocal app = honeymoon.new()\n\n-- Middleware\napp:use(honeymoon.logger())\napp:use(honeymoon.json())\n\n-- Routes\napp:get("/", function(req, res)\n    res:json({\n        message = "Hello, CopperMoon!",\n        version = _COPPERMOON_VERSION\n    })\nend)\n\napp:get("/users/:id", function(req, res)\n    local user = db.find("users", req.params.id)\n    res:json(user)\nend)\n\napp:listen(3000)') !}
 {% endblock %}
